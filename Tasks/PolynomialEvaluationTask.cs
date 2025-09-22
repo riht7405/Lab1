@@ -12,48 +12,53 @@ namespace Lab1.Tasks
 {
     public class PolynomialEvaluationTask : ITask
     {
-        private readonly int degree;
+        private readonly int m, n;
         private readonly CounterMode mode;
 
-        public PolynomialEvaluationTask(int degree, CounterMode mode = CounterMode.TimeAndSteps)
+        public PolynomialEvaluationTask(int m, int n, CounterMode mode = CounterMode.TimeAndSteps)
         {
-            this.degree = degree;
+            this.m = m;
+            this.n = n;
             this.mode = mode;
         }
 
-        public string Name => "Polynomial Evaluation (Naive & Horner)";
+        public string Name => "Polynomial Evaluation (Naive)";
         public PlotModel? LastPlotModel { get; private set; }
+
         public void Run()
         {
-            var coeffs = DataGenerator.Uniform(0, degree, 1, 5);
-            double x = 1.5;
+            var times = new List<double>();
+            int repeats = 5;
 
-            // Наивный метод
-            var counter = new PerformanceCounter(mode);
-            counter.Start();
-            double naive = 0;
-            for (int k = 0; k < coeffs.Count; k++)
+            for (int size = m; size <= n; size++)
             {
-                naive += coeffs[k] * Math.Pow(x, degree - k);
-                counter.IncrementStep();
-            }
-            counter.Stop();
-            Console.WriteLine($"{Name} (Naive): {naive:F3}, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
+                double totalTime = 0;
 
-            // Горнер
-            counter = new PerformanceCounter(mode);
-            counter.Start();
-            double horner = coeffs[0];
-            for (int k = 1; k < coeffs.Count; k++)
-            {
-                horner = horner * x + coeffs[k];
-                counter.IncrementStep();
-            }
-            counter.Stop();
-            Console.WriteLine($"{Name} (Horner): {horner:F3}, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
+                for (int r = 0; r < repeats; r++)
+                {
+                    var coeffs = DataGenerator.Uniform(0, size - 1, 1, 5);
+                    double x = 1.5;
+                    var counter = new PerformanceCounter(mode);
 
-            // Для отображения: покажем ряд коэффициентов как линию
-            LastPlotModel = Plotter.CreateLinePlot("Polynomial coefficients", coeffs, 0);
+                    counter.Start();
+                    double result = 0;
+                    for (int k = 0; k < coeffs.Count; k++)
+                    {
+                        result += coeffs[k] * Math.Pow(x, k);
+                        counter.IncrementStep();
+                    }
+                    counter.Stop();
+
+                    totalTime += counter.ElapsedMs / 1000.0;
+                }
+
+                times.Add(totalTime / repeats);
+            }
+
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            LastPlotModel.InvalidatePlot(true);
         }
+
     }
+
 }

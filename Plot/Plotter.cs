@@ -11,36 +11,63 @@ namespace Lab1.Plot
 {
     public static class Plotter
     {
-        public static PlotModel CreateLinePlot(string title, IList<double> values, int startIndex)
+        public static PlotModel CreateLinePlot(string title, IList<double> experimental, int startIndex, IList<double>? theoretical = null)
         {
-            var model = new PlotModel { Title = title };
+            var plotModel = new PlotModel
+            {
+                Title = title,
+                Background = OxyColors.White
+            };
 
             var xAxis = new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Title = "День",
+                Title = "Размерность входных данных n",
                 Minimum = startIndex,
-                Maximum = startIndex + values.Count - 1
+                Maximum = startIndex + experimental.Count - 1,
+                MajorGridlineStyle = LineStyle.Solid,
+                MajorGridlineColor = OxyColors.LightGray
             };
 
             var yAxis = new LinearAxis
             {
                 Position = AxisPosition.Left,
-                Title = "Мощность (ср.)"
+                Title = theoretical == null ? "Среднее время выполнения (сек)" : "Значение",
+                MajorGridlineStyle = LineStyle.Solid,
+                MajorGridlineColor = OxyColors.LightGray
             };
 
-            model.Axes.Add(xAxis);
-            model.Axes.Add(yAxis);
+            plotModel.Axes.Add(xAxis);
+            plotModel.Axes.Add(yAxis);
 
-            var series = new LineSeries { Title = "y" };
-            for (int i = 0; i < values.Count; i++)
+            // Экспериментальная серия (зелёная)
+            var expSeries = new LineSeries
             {
-                series.Points.Add(new DataPoint(startIndex + i, values[i]));
+                Color = OxyColors.Lime,
+                StrokeThickness = 2,
+                MarkerType = MarkerType.None,
+                Title = "Эксперимент"
+            };
+            for (int i = 0; i < experimental.Count; i++)
+                expSeries.Points.Add(new DataPoint(startIndex + i, experimental[i]));
+            plotModel.Series.Add(expSeries);
+
+            // Теоретическая серия (красная)
+            if (theoretical != null)
+            {
+                var theorySeries = new LineSeries
+                {
+                    Color = OxyColors.Red,
+                    StrokeThickness = 2,
+                    MarkerType = MarkerType.None,
+                    Title = "Теория"
+                };
+                for (int i = 0; i < theoretical.Count; i++)
+                    theorySeries.Points.Add(new DataPoint(startIndex + i, theoretical[i]));
+                plotModel.Series.Add(theorySeries);
             }
 
-            model.Series.Add(series);
-
-            return model;
+            return plotModel;
         }
     }
 }

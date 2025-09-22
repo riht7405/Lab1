@@ -26,22 +26,35 @@ namespace Lab1.Tasks
         public PlotModel? LastPlotModel { get; private set; }
         public void Run()
         {
-            var counter = new PerformanceCounter(mode);
-            counter.Start();
+            var times = new List<double>();
+            int repeats = 5;
 
-            var data = DataGenerator.Uniform(m, n, 1, 5);
-            double product = 1;
-            foreach (var v in data)
+            for (int size = m; size <= n; size++)
             {
-                product *= v;
-                counter.IncrementStep();
+                double totalTime = 0;
+
+                for (int r = 0; r < repeats; r++)
+                {
+                    var data = DataGenerator.Uniform(1, size, 1, 5);
+                    var counter = new PerformanceCounter(mode);
+
+                    counter.Start();
+                    double product = 1;
+                    foreach (var v in data)
+                    {
+                        product *= v;
+                        counter.IncrementStep();
+                    }
+                    counter.Stop();
+
+                    totalTime += counter.ElapsedMs / 1000.0;
+                }
+
+                times.Add(totalTime / repeats);
             }
 
-            counter.Stop();
-            Console.WriteLine($"{Name}: произведение={product:E3}, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
-
-            // Для наглядности строим график исходных данных
-            LastPlotModel = Plotter.CreateLinePlot(Name, data, m);
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            LastPlotModel.InvalidatePlot(true);
         }
     }
 }

@@ -42,33 +42,39 @@ namespace Lab1.Tasks
 
         public void Run()
         {
-            var counter = new PerformanceCounter(mode);
-            var data = DataGenerator.Uniform(m, n, 1, 100);
+            var times = new List<double>();
+            int repeats = 5;
 
-            counter.Start();
-            var arr = data.ToArray();
-            for (int i = 0; i < arr.Length - 1; i++)
+            for (int size = m; size <= n; size++)
             {
-                for (int j = 0; j < arr.Length - i - 1; j++)
+                double totalTime = 0;
+
+                for (int r = 0; r < repeats; r++)
                 {
-                    counter.IncrementStep();
-                    if (arr[j] > arr[j + 1])
-                        (arr[j], arr[j + 1]) = (arr[j + 1], arr[j]);
+                    var data = DataGenerator.Uniform(1, size, 1, 100);
+                    var arr = data.ToArray();
+                    var counter = new PerformanceCounter(mode);
+
+                    counter.Start();
+                    for (int i = 0; i < arr.Length - 1; i++)
+                    {
+                        for (int j = 0; j < arr.Length - i - 1; j++)
+                        {
+                            counter.IncrementStep();
+                            if (arr[j] > arr[j + 1])
+                                (arr[j], arr[j + 1]) = (arr[j + 1], arr[j]);
+                        }
+                    }
+                    counter.Stop();
+
+                    totalTime += counter.ElapsedMs / 1000.0;
                 }
+
+                times.Add(totalTime / repeats);
             }
-            counter.Stop();
 
-            Console.WriteLine($"{Name}: {arr.Length} элементов, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
-            Console.WriteLine($"Data.Count = {data.Count}");
-
-            // Строим график
-            var plot = Plotter.CreateLinePlot(Name, data, m);
-
-            // Перерисовываем
-            plot.InvalidatePlot(true);
-
-            // Устанавливаем свойство с уведомлением UI
-            LastPlotModel = plot;
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            LastPlotModel.InvalidatePlot(true);
         }
     }
 }

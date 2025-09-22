@@ -20,30 +20,25 @@ namespace Lab1.Services
         {
             var runner = new Runner();
 
-            runner.AddTask(new ConstantFunctionTask(10, 50, 1.0, CounterMode.TimeOnly));
-            runner.AddTask(new SumElementsTask(10, 50, CounterMode.StepsOnly));
-            runner.AddTask(new ProductElementsTask(10, 50, CounterMode.StepsOnly));
-            runner.AddTask(new PolynomialEvaluationTask(10, CounterMode.TimeAndSteps));
-            runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.StepsOnly));
-            runner.AddTask(new QuickSortTask(10, 50, CounterMode.TimeOnly));
-            runner.AddTask(new TimSortTask(10, 50, CounterMode.TimeOnly));
-            runner.AddTask(new PowerAlgorithmTask(2, 20, CounterMode.TimeAndSteps));
+            runner.AddTask(new ConstantFunctionTask(10, 1000, 1.0, CounterMode.TimeOnly));
+            runner.AddTask(new SumElementsTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new ProductElementsTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new PolynomialEvaluationTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new TimSortTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new PowerAlgorithmTask(2, 1000, 2.0, CounterMode.StepsOnly));
 
             runner.RunAll();
             return runner.Models;
         }
 
-        /// <summary>
-        /// Запускает только выбранные алгоритмы
-        /// </summary>
         public static List<PlotModel> GetSelectedPlots()
         {
             var runner = new Runner();
 
-            // Например, сравнение пузырька и быстрой сортировки
-            runner.AddTask(new BubbleSortTask(10, 1000, CounterMode.TimeOnly));
             runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
-            runner.AddTask(new TimSortTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.TimeOnly));
 
             runner.RunAll();
             return runner.Models;

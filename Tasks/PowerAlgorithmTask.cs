@@ -14,65 +14,58 @@ namespace Lab1.Tasks
     {
         public class PowerAlgorithmTask : ITask
         {
+            private readonly int m, n;
             private readonly double baseValue;
-            private readonly int exponent;
             private readonly CounterMode mode;
 
-            public PowerAlgorithmTask(double baseValue, int exponent, CounterMode mode = CounterMode.TimeAndSteps)
+            public PowerAlgorithmTask(int m, int n, double baseValue = 2.0, CounterMode mode = CounterMode.TimeAndSteps)
             {
+                this.m = m;
+                this.n = n;
                 this.baseValue = baseValue;
-                this.exponent = exponent;
                 this.mode = mode;
             }
 
-            public string Name => "Power Algorithm (Naive & Fast)";
+            public string Name => "Power Algorithm (Fast)";
             public PlotModel? LastPlotModel { get; private set; }
 
             public void Run()
             {
-                // Наивный метод + собираем значения для графика роста a^k
-                var counter = new PerformanceCounter(mode);
-                counter.Start();
+                var stepsList = new List<double>();
 
-                double naiveResult = 1;
-                var series = new List<double>();
-                series.Add(1); // a^0
-
-                for (int i = 1; i <= exponent; i++)
+                for (int exp = m; exp <= n; exp++)
                 {
-                    naiveResult *= baseValue;
-                    series.Add(naiveResult);
-                    counter.IncrementStep();
+                    var counter = new PerformanceCounter(mode);
+
+                    counter.Start();
+                    double result = FastPower(baseValue, exp, counter);
+                    counter.Stop();
+
+                    stepsList.Add(counter.Steps);
                 }
 
-                counter.Stop();
-                Console.WriteLine($"{Name} (Naive): {naiveResult}, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
-
-                // Быстрое возведение в степень
-                counter = new PerformanceCounter(mode);
-                counter.Start();
-                double fastResult = FastPower(baseValue, exponent, counter);
-                counter.Stop();
-                Console.WriteLine($"{Name} (Fast): {fastResult}, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
-
-                // Визуализируем рост последовательности a^k, k=0..exponent
-                LastPlotModel = Plotter.CreateLinePlot($"a^k, a={baseValue}", series, 0);
+                // Строим график: X — показатель степени, Y — количество шагов
+                LastPlotModel = Plotter.CreateLinePlot(Name, stepsList, m);
+                LastPlotModel.InvalidatePlot(true);
             }
 
-            private double FastPower(double a, int n, PerformanceCounter counter)
+
+
+            private double FastPower(double a, int p, PerformanceCounter counter)
             {
                 counter.IncrementStep();
-                if (n == 0) return 1;
-                if (n % 2 == 0)
+                if (p == 0) return 1;
+                if (p % 2 == 0)
                 {
-                    double half = FastPower(a, n / 2, counter);
+                    double half = FastPower(a, p / 2, counter);
                     return half * half;
                 }
                 else
                 {
-                    return a * FastPower(a, n - 1, counter);
+                    return a * FastPower(a, p - 1, counter);
                 }
             }
         }
+
     }
 }
