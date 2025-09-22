@@ -1,0 +1,7 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
+        x:Class="Lab1.MainWindow"
+        Title="Графики алгоритмов" Width="800" Height="600">
+    <oxy:PlotView Model="{Binding CurrentPlot}" />
+</Window>
