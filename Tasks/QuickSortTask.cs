@@ -27,31 +27,37 @@ namespace Lab1.Tasks
         public void Run()
         {
             var times = new List<double>();
+            var theoryRaw = new List<double>();
             int repeats = 5;
 
             for (int size = m; size <= n; size++)
             {
-                double totalTime = 0;
-
+                double total = 0;
                 for (int r = 0; r < repeats; r++)
                 {
-                    var data = DataGenerator.Uniform(1, size, 1, 100);
-                    var arr = data.ToArray();
+                    var arr = DataGenerator.Uniform(1, size, 1, 100).ToArray();
                     var counter = new PerformanceCounter(mode);
 
                     counter.Start();
                     QuickSort(arr, 0, arr.Length - 1, counter);
                     counter.Stop();
 
-                    totalTime += counter.ElapsedMs / 1000.0;
+                    total += mode == CounterMode.StepsOnly ? counter.Steps : counter.ElapsedMs / 1000.0;
                 }
 
-                times.Add(totalTime / repeats);
+                times.Add(total / repeats);
+                theoryRaw.Add(size * Math.Log(size)); // O(n log n)
             }
 
-            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            // нормирование по последним значениям
+            double coef = times[^1] / theoryRaw[^1];
+            var theory = theoryRaw.Select(v => v * coef).ToList();
+
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m, theory);
             LastPlotModel.InvalidatePlot(true);
         }
+
+
 
         private void QuickSort(double[] arr, int left, int right, PerformanceCounter counter)
         {

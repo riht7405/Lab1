@@ -37,8 +37,7 @@ namespace Lab1.Services
         {
             var runner = new Runner();
 
-            runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
-            runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new PowerAlgorithmTask(2, 1000, 2.0, CounterMode.StepsOnly));
 
             runner.RunAll();
             return runner.Models;

@@ -31,7 +31,8 @@ namespace Lab1.Tasks
 
             public void Run()
             {
-                var stepsList = new List<double>();
+                var times = new List<double>();
+                var theoryRaw = new List<double>();
 
                 for (int exp = m; exp <= n; exp++)
                 {
@@ -41,13 +42,17 @@ namespace Lab1.Tasks
                     double result = FastPower(baseValue, exp, counter);
                     counter.Stop();
 
-                    stepsList.Add(counter.Steps);
+                    times.Add(counter.Steps); // считаем шаги
+                    theoryRaw.Add(Math.Log(exp, 2)); // O(log n)
                 }
+                //нормирование по шагам
+                double coef = times[^1] / theoryRaw[^1];
+                var theory = theoryRaw.Select(v => v * coef).ToList();
 
-                // Строим график: X — показатель степени, Y — количество шагов
-                LastPlotModel = Plotter.CreateLinePlot(Name, stepsList, m);
+                LastPlotModel = Plotter.CreateLinePlot(Name, times, m, theory);
                 LastPlotModel.InvalidatePlot(true);
             }
+
 
 
 

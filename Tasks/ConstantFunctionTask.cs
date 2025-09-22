@@ -29,29 +29,27 @@ namespace Lab1.Tasks
         public void Run()
         {
             var times = new List<double>();
-            int repeats = 5;
+            var theoryRaw = new List<double>();
 
             for (int size = m; size <= n; size++)
             {
-                double totalTime = 0;
+                var data = DataGenerator.Constant(1, size, value);
+                var counter = new PerformanceCounter(mode);
 
-                for (int r = 0; r < repeats; r++)
-                {
-                    var data = DataGenerator.Constant(1, size, value);
-                    var counter = new PerformanceCounter(mode);
+                counter.Start();
+                counter.AddSteps(data.Count);
+                counter.Stop();
 
-                    counter.Start();
-                    counter.AddSteps(data.Count);
-                    counter.Stop();
-
-                    totalTime += counter.ElapsedMs / 1000.0;
-                }
-
-                times.Add(totalTime / repeats);
+                times.Add(counter.ElapsedMs / 1000.0);
+                theoryRaw.Add(1); // O(1)
             }
+            //нормирование
+            double coef = times[^1] / theoryRaw[^1];
+            var theory = theoryRaw.Select(v => v * coef).ToList();
 
-            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m, theory);
             LastPlotModel.InvalidatePlot(true);
         }
+
     }
 }

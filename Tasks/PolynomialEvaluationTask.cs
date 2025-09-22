@@ -28,36 +28,34 @@ namespace Lab1.Tasks
         public void Run()
         {
             var times = new List<double>();
-            int repeats = 5;
+            var theoryRaw = new List<double>();
 
             for (int size = m; size <= n; size++)
             {
-                double totalTime = 0;
+                var coeffs = DataGenerator.Uniform(0, size - 1, 1, 5);
+                double x = 1.5;
+                var counter = new PerformanceCounter(mode);
 
-                for (int r = 0; r < repeats; r++)
+                counter.Start();
+                double result = 0;
+                for (int k = 0; k < coeffs.Count; k++)
                 {
-                    var coeffs = DataGenerator.Uniform(0, size - 1, 1, 5);
-                    double x = 1.5;
-                    var counter = new PerformanceCounter(mode);
-
-                    counter.Start();
-                    double result = 0;
-                    for (int k = 0; k < coeffs.Count; k++)
-                    {
-                        result += coeffs[k] * Math.Pow(x, k);
-                        counter.IncrementStep();
-                    }
-                    counter.Stop();
-
-                    totalTime += counter.ElapsedMs / 1000.0;
+                    result += coeffs[k] * Math.Pow(x, k);
+                    counter.IncrementStep();
                 }
+                counter.Stop();
 
-                times.Add(totalTime / repeats);
+                times.Add(counter.ElapsedMs / 1000.0);
+                theoryRaw.Add(size); // O(n)
             }
 
-            LastPlotModel = Plotter.CreateLinePlot(Name, times, m);
+            double coef = times[^1] / theoryRaw[^1];
+            var theory = theoryRaw.Select(v => v * coef).ToList();
+
+            LastPlotModel = Plotter.CreateLinePlot(Name, times, m, theory);
             LastPlotModel.InvalidatePlot(true);
         }
+
 
     }
 
