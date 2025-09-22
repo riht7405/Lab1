@@ -7,13 +7,15 @@ using Lab1.Interfaces;
 using Lab1.Plot;
 using Lab1.Utils;
 using OxyPlot;
+using System.ComponentModel;
 
 namespace Lab1.Tasks
 {
-    public class BubbleSortTask : ITask
+    public class BubbleSortTask : ITask, INotifyPropertyChanged
     {
         private readonly int m, n;
         private readonly CounterMode mode;
+        private PlotModel? _lastPlotModel;
 
         public BubbleSortTask(int m, int n, CounterMode mode = CounterMode.TimeAndSteps)
         {
@@ -24,7 +26,19 @@ namespace Lab1.Tasks
 
         public string Name => "Bubble Sort";
 
-        public PlotModel? LastPlotModel { get; private set; }
+        public PlotModel? LastPlotModel
+        {
+            get => _lastPlotModel;
+            private set
+            {
+                _lastPlotModel = value;
+                OnPropertyChanged(nameof(LastPlotModel));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public void Run()
         {
@@ -48,12 +62,13 @@ namespace Lab1.Tasks
             Console.WriteLine($"Data.Count = {data.Count}");
 
             // Строим график
-            LastPlotModel = Plotter.CreateLinePlot(Name, data, m);
+            var plot = Plotter.CreateLinePlot(Name, data, m);
 
-            // Форсируем перерисовку
-            LastPlotModel.InvalidatePlot(true);
+            // Перерисовываем
+            plot.InvalidatePlot(true);
+
+            // Устанавливаем свойство с уведомлением UI
+            LastPlotModel = plot;
         }
-
     }
-
 }

@@ -41,7 +41,9 @@ namespace Lab1.Services
             var runner = new Runner();
 
             // Например, сравнение пузырька и быстрой сортировки
-            runner.AddTask(new BubbleSortTask(10, 1000, CounterMode.StepsOnly));
+            runner.AddTask(new BubbleSortTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
+            runner.AddTask(new TimSortTask(10, 1000, CounterMode.TimeOnly));
 
             runner.RunAll();
             return runner.Models;
