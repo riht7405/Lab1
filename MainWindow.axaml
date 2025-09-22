@@ -2,6 +2,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
         x:Class="Lab1.MainWindow"
-        Title="������� ����������" Width="800" Height="600">
-    <oxy:PlotView Model="{Binding CurrentPlot}" />
+        Title="Графики"
+        Width="800" Height="600">
+
+	<!-- TabControl, где каждая вкладка — отдельный PlotModel -->
+	<TabControl ItemsSource="{Binding Plots}">
+		<!-- Заголовок вкладки -->
+		<TabControl.ItemTemplate>
+			<DataTemplate>
+				<TextBlock Text="{Binding Title}" />
+			</DataTemplate> 
+		</TabControl.ItemTemplate>
+
+		<!-- Содержимое вкладки -->
+		<TabControl.ContentTemplate>
+			<DataTemplate>
+				<oxy:PlotView Model="{Binding}"
+							  Background="White"
+							  HorizontalAlignment="Stretch"
+							  VerticalAlignment="Stretch" />
+			</DataTemplate>
+		</TabControl.ContentTemplate>
+
+	</TabControl>
 </Window>

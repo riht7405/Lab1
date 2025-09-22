@@ -39,6 +39,7 @@ namespace Lab1.Plot
             }
 
             model.Series.Add(series);
+
             return model;
         }
     }

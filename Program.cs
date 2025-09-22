@@ -2,6 +2,7 @@
 using Lab1.Tasks;
 using Lab1.Tasks.Lab1.Tasks;
 using Lab1.Utils;
+using Avalonia.ReactiveUI;
 
 namespace Lab1
 {
@@ -14,6 +15,6 @@ namespace Lab1
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
-                         .LogToTrace();
+                         .LogToTrace().UseReactiveUI();
     }
 }

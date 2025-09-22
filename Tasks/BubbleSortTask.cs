@@ -43,11 +43,17 @@ namespace Lab1.Tasks
                 }
             }
             counter.Stop();
-            Console.WriteLine($"{Name}: {arr.Length} элементов, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
 
-            // Строим график по исходным данным (или по отсортированным — как тебе нужно)
+            Console.WriteLine($"{Name}: {arr.Length} элементов, время={counter.ElapsedMs:F3} мс, шаги={counter.Steps}");
+            Console.WriteLine($"Data.Count = {data.Count}");
+
+            // Строим график
             LastPlotModel = Plotter.CreateLinePlot(Name, data, m);
+
+            // Форсируем перерисовку
+            LastPlotModel.InvalidatePlot(true);
         }
+
     }
 
 }

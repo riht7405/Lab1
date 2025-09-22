@@ -7,6 +7,7 @@ using Lab1.Tasks;
 using OxyPlot;
 using Lab1.Utils;
 using Lab1.Tasks.Lab1.Tasks;
+using Lab1.Plot;
 
 namespace Lab1.Services
 {
@@ -23,7 +24,7 @@ namespace Lab1.Services
             runner.AddTask(new SumElementsTask(10, 50, CounterMode.StepsOnly));
             runner.AddTask(new ProductElementsTask(10, 50, CounterMode.StepsOnly));
             runner.AddTask(new PolynomialEvaluationTask(10, CounterMode.TimeAndSteps));
-            runner.AddTask(new BubbleSortTask(10, 50, CounterMode.StepsOnly));
+            runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.StepsOnly));
             runner.AddTask(new QuickSortTask(10, 50, CounterMode.TimeOnly));
             runner.AddTask(new TimSortTask(10, 50, CounterMode.TimeOnly));
             runner.AddTask(new PowerAlgorithmTask(2, 20, CounterMode.TimeAndSteps));
@@ -40,7 +41,7 @@ namespace Lab1.Services
             var runner = new Runner();
 
             // Например, сравнение пузырька и быстрой сортировки
-            runner.AddTask(new BubbleSortTask(10, 50, CounterMode.StepsOnly));
+            runner.AddTask(new BubbleSortTask(10, 1000, CounterMode.StepsOnly));
 
             runner.RunAll();
             return runner.Models;
