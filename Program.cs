@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Lab1.Tasks;
-using Lab1.Tasks.Lab1.Tasks;
 using Lab1.Utils;
 using Avalonia.ReactiveUI;
 

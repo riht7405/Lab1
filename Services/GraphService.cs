@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Lab1.Tasks;
 using OxyPlot;
 using Lab1.Utils;
-using Lab1.Tasks.Lab1.Tasks;
 using Lab1.Plot;
 
 namespace Lab1.Services
@@ -31,7 +30,12 @@ namespace Lab1.Services
                 runner.AddTask(new BubbleSortTask(1, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new TimSortTask(10, 1000, CounterMode.TimeOnly));
-                runner.AddTask(new PowerAlgorithmTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new FastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+
+                runner.AddTask(new NaivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new RecursivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new FastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new ClassicFastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
 
                 runner.RunAll();
                 return runner.Models;
@@ -41,7 +45,10 @@ namespace Lab1.Services
             {
                 var runner = new Runner();
 
-                runner.AddTask(new PowerAlgorithmTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new FastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new ClassicFastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new NaivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new RecursivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
                 runner.AddTask(new KadaneAlgorithmTask(10, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new BoyerMooreMajorityTask(10, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new SlidingWindowAnagramTask(10, 1000, CounterMode.TimeOnly));
