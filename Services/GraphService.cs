@@ -31,6 +31,7 @@ namespace Lab1.Services
                 runner.AddTask(new QuickSortTask(10, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new TimSortTask(10, 1000, CounterMode.TimeOnly));
                 runner.AddTask(new FastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
+                runner.AddTask(new FlowerFractalTask(1, 50, CounterMode.StepsOnly));
 
                 runner.AddTask(new NaivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
                 runner.AddTask(new RecursivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
@@ -45,15 +46,7 @@ namespace Lab1.Services
             {
                 var runner = new Runner();
 
-                runner.AddTask(new FastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
-                runner.AddTask(new ClassicFastPowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
-                runner.AddTask(new NaivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
-                runner.AddTask(new RecursivePowerTask(2, 1000, 2.0, CounterMode.StepsOnly));
-                runner.AddTask(new KadaneAlgorithmTask(10, 1000, CounterMode.TimeOnly));
-                runner.AddTask(new BoyerMooreMajorityTask(10, 1000, CounterMode.TimeOnly));
-                runner.AddTask(new SlidingWindowAnagramTask(10, 1000, CounterMode.TimeOnly));
-                runner.AddTask(new TrappingRainWaterTask(10, 1000, CounterMode.TimeOnly)); // ← ДОБАВЛЕНО
-
+                runner.AddTask(new FlowerFractalTask(1, 14, CounterMode.TimeOnly));
                 runner.RunAll();
                 return runner.Models;
             }
