@@ -46,7 +46,7 @@ namespace Lab1.Services
             {
                 var runner = new Runner();
 
-                runner.AddTask(new FlowerFractalTask(1, 14, CounterMode.TimeOnly));
+                runner.AddTask(new FlowerFractalTask(1, 14, CounterMode.StepsOnly));
                 runner.RunAll();
                 return runner.Models;
             }
